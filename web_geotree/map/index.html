@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drawer and Map Example</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/esri-leaflet@2.5.0/dist/esri-leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <button class="open-btn" id="openBtn"><i class="fas fa-bars"></i></button>
+        <div><img src="../assets/header.svg" alt="SVG Image" class="header-image"></div>
+        <div class="nav-right">
+            <i class="fa-solid fa-bell not-btn"></i>
+            <img class="profile-pic-nav" src="../assets/profile.png" alt="Profile Picture">
+            <div class="dropdown">
+                <p class="prof-name">John Doe <i class="fa-solid fa-chevron-down down"></i></p>
+                <div class="dropdown-content" id="dropdownContent">
+                    <p>johndoe@example.com</p><br>
+                    <p>Surveyor</p><br>
+                    <p>Logout<i class="fa-solid fa-power-off p-off"></i></p><br>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="drawer" id="drawer">
+        <button class="close-btn" id="closeBtn">&times;</button>
+        <div><img src="../assets/drawhead.svg" alt="SVG Image" class="drawer-image"></div>
+        <div class="profile">
+            <img class="profile-pic" src="../assets/profile.png" alt="Profile Picture">
+            <div class="profile-info">
+                <p class="name">John Doe</p>
+                <p class="email">johndoe@example.com</p>
+                <p class="role">Survey Partner</p>
+            </div>
+        </div>
+        <div class="options">
+            <div class="option">
+                <i class="fa-solid fa-house-chimney"></i>
+                <span>Home</span>
+            </div>
+            <div class="option">
+                <i class="fas fa-table-cells-large"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="option">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </div>
+            <div class="option">
+                <i class="fa-solid fa-list-check"></i>
+                <span>Tasks</span>
+            </div>
+            <div class="option">
+                <i class="fa-solid fa-tree"></i>
+                <span>Added Tree</span>
+            </div>
+            <div class="option">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>History</span>
+            </div>
+            <div class="option">
+                <i class="fa-brands fa-joomla"></i>
+                <span>Track Carbon Footprint</span>
+            </div>
+            <div class="option">
+                <i class="fa-solid fa-cloud-arrow-down"></i>
+                <span>Downloads</span>
+            </div>
+        </div>
+  
+    </div>
+   
+    <div class="map-container">
+        <div id="map" >
+            <div style="position: relative; top: 0; left: 0; z-index: 1000;">
+    </div>
+            <div id="layer-control"></div>
+            
+        </div>
+    </div>
+    <script>
+        var map = L.map('map').setView([51.505, -0.09], 13);
+      
+        // Add a tile layer (e.g. OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+          subdomains: ['a', 'b', 'c']
+        }).addTo(map);
+      
+        // Add a satellite layer (e.g. Esri World Imagery)
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        }).addTo(map);
+        
+      
+        // Check if the browser supports geolocation
+        if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(function(position) {
+    // Get the user's current location
+    var lat = position.coords.latitude;
+    var lon = position.coords.longitude;
+
+    // Create a marker at the user's location
+    var userMarker = L.marker([lat, lon]).addTo(map);
+
+    // Zoom to the user's location
+    map.setView([lat, lon], 15);
+  }, function(error) {
+    console.error("Error getting location:", error);
+  });
+} else {
+  console.error("Geolocation is not supported by this browser.");
+}
+      </script>
+      <script>
+        var layerControl = L.control.layers({
+          'OpenStreetMap': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+            subdomains: ['a', 'b', 'c']
+          }),
+          'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+          })
+        }).addTo(map);
+      </script>
+</body>
+</html>
